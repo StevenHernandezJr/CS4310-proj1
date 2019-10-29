@@ -39,15 +39,12 @@ class Node:
             if (pair[1] + cost_to_neighbor) < self.routing_table[index][1]:
                self.routing_table[index][1] = pair[1] + cost_to_neighbor
                self.routing_table[index][2] = self.incoming_packet[0]
-               updated = True
          else:
             self.routing_table.append([pair[0], pair[1] + cost_to_neighbor, self.incoming_packet[0]])
-            updated = True
-      return updated
 
    def receive_dv_packet(self, packet):
       self.incoming_packet = packet
-      #self.update_rtable()
+      self.update_rtable()
 
    def generate_dv_packet(self):
       pairs = []
@@ -83,6 +80,7 @@ def set_neighbors(nodes, topology):
 
 def main():
    file_name = sys.argv[1]
+   num_rounds = int(sys.argv[2])
    topology = parse_file(file_name)
    number_of_nodes = find_total_nodes(topology)
 
@@ -92,18 +90,26 @@ def main():
 
    set_neighbors(nodes, topology)
 
-   print("Node 4 Table: ", end="")
-   nodes[4].print_rtable()
-   print()
+   for num in range(0, num_rounds):
+      for node in nodes:
+         node.send_dv_packet()
 
-   nodes[3].send_dv_packet()
-   print("DV packet sent to Node 4: ", end="")
-   print(nodes[4].incoming_packet)
-   print()
+   for node in nodes:
+      print(f"Node {nodes.index(node)} table: ", end="")
+      node.print_rtable()
 
-   nodes[4].update_rtable()
-   print("Node 4 Table: ", end="")
-   nodes[4].print_rtable()
+   #print("Node 4 Table: ", end="")
+   #nodes[4].print_rtable()
+   #print()
+
+   #nodes[3].send_dv_packet()
+   #print("DV packet sent to Node 4: ", end="")
+   #print(nodes[4].incoming_packet)
+   #print()
+
+   #nodes[4].update_rtable()
+   #print("Node 4 Table: ", end="")
+   #nodes[4].print_rtable()
 
 if __name__ == '__main__':
    main()
