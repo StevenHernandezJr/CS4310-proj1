@@ -15,7 +15,10 @@ class Node:
       self.routing_table.append([node.get_id(), cost, node.get_id()])
 
    def print_rtable(self):
-      print(self.routing_table)
+      #print(self.routing_table)
+      print("Destination\tCost\tNext Hop")
+      for entry in self.routing_table:
+         print(f"{entry[0]}\t\t{entry[1]}\t{entry[2]}")
 
    def update_rtable(self):
       updated = False
@@ -95,21 +98,9 @@ def main():
          node.send_dv_packet()
 
    for node in nodes:
-      print(f"Node {nodes.index(node)} table: ", end="")
+      print(f"Node {nodes.index(node)} Routing Table:")
       node.print_rtable()
-
-   #print("Node 4 Table: ", end="")
-   #nodes[4].print_rtable()
-   #print()
-
-   #nodes[3].send_dv_packet()
-   #print("DV packet sent to Node 4: ", end="")
-   #print(nodes[4].incoming_packet)
-   #print()
-
-   #nodes[4].update_rtable()
-   #print("Node 4 Table: ", end="")
-   #nodes[4].print_rtable()
+      print()
 
 if __name__ == '__main__':
    main()
