@@ -15,13 +15,11 @@ class Node:
       self.routing_table.append([node.get_id(), cost, node.get_id()])
 
    def print_rtable(self):
-      #print(self.routing_table)
       print("Destination\tCost\tNext Hop")
       for entry in self.routing_table:
          print(f"{entry[0]}\t\t{entry[1]}\t{entry[2]}")
 
    def update_rtable(self):
-      updated = False
       for entry in self.routing_table:
          if entry[0] != self.incoming_packet[0]:
             continue
@@ -60,6 +58,20 @@ class Node:
       for node in self.neighbors:
          node.receive_dv_packet(packet)
 
+   def receive_data_packet(self, data_packet):
+      if data_packet[0] == self.id:
+         print(f"(Node {self.id}): I have received the data packet!")
+      else:
+         for entry in self.routing_table:
+            if entry[0] != data_packet[0]:
+               continue
+            print(f"(Node {self.id}): Forwarding data packet to Node {entry[2]}")
+            for node in self.neighbors:
+               if node.get_id() != entry[2]:
+                  continue
+               node.receive_data_packet(data_packet)
+
+
 def parse_file(file_name):
    topology = []
    with open(file_name, 'r') as input_file:
@@ -97,10 +109,18 @@ def main():
       for node in nodes:
          node.send_dv_packet()
 
-   for node in nodes:
-      print(f"Node {nodes.index(node)} Routing Table:")
-      node.print_rtable()
-      print()
+   if file_name == "topology1.txt":
+      data_packet = [3, "Data for Node 3 to read"]
+   elif file_name == "topology2.txt":
+      data_packet = [7, "Data for Node 7 to read"]
+   elif file_name == "topology3.txt":
+      data_packet = [23, "Data for Node 23 to read"]
+   nodes[0].receive_data_packet(data_packet)
+
+   #for node in nodes:
+   #   print(f"Node {nodes.index(node)} Routing Table:")
+   #   node.print_rtablze()
+   #   print()
 
 if __name__ == '__main__':
    main()
