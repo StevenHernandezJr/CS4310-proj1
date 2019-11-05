@@ -40,8 +40,10 @@ class Node:
             if (pair[1] + cost_to_neighbor) < self.routing_table[index][1]:
                self.routing_table[index][1] = pair[1] + cost_to_neighbor
                self.routing_table[index][2] = self.incoming_packet[0]
+               print(f"Node {self.id} updating routing table...")
          else:
             self.routing_table.append([pair[0], pair[1] + cost_to_neighbor, self.incoming_packet[0]])
+            print(f"Node {self.id} updating routing table...")
 
    def receive_dv_packet(self, packet):
       self.incoming_packet = packet
@@ -106,6 +108,7 @@ def main():
    set_neighbors(nodes, topology)
 
    for num in range(0, num_rounds):
+      print(f"Round {num + 1}:")
       for node in nodes:
          node.send_dv_packet()
 
@@ -115,7 +118,7 @@ def main():
       data_packet = [7, "Data for Node 7 to read"]
    elif file_name == "topology3.txt":
       data_packet = [23, "Data for Node 23 to read"]
-   nodes[0].receive_data_packet(data_packet)
+   #nodes[0].receive_data_packet(data_packet)
 
    #for node in nodes:
    #   print(f"Node {nodes.index(node)} Routing Table:")
