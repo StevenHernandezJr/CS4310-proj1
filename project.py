@@ -25,6 +25,7 @@ class Node:
         self.neighbor_links.append(neighbor)
         self.routing_table.append([neighbor.get_id(), cost, neighbor.get_id()])
 
+    # Generate a DV packet and store it
     def prepare_dv_packet(self):
         pairs = []
         for entry in self.routing_table:
@@ -33,13 +34,7 @@ class Node:
 
     # Generate DV packet and send it to each neighboring node
     def send_dv_packet(self):
-        #pairs = []
-        #for entry in self.routing_table:
-        #    pairs.append([entry[0], entry[1]])
-        #packet = [self.id, pairs]
-
         for link in self.neighbor_links:
-            #link.set_dv_packet(packet)
             link.set_dv_packet(self.outgoing_packet)
         self.outgoing_packet = None
 
@@ -81,6 +76,22 @@ class Node:
 
         self.incoming_packet = None
         return updated
+
+    # Forward packet using routing table, unless destination is reached
+    # Data packets are of the form: [Destination, Data(Payload)]
+    def forward_data_packet(self, packet):
+        if self.id == packet[0]:
+            print(f"Node {self.id}: Destination has been reached!")
+        else:
+            for entry in self.routing_table:
+                if entry[0] != packet[0]:
+                    continue
+                next_hop = entry[2]
+            for link in self.neighbor_links:
+                if link.get_id() != next_hop:
+                    continue
+                print(f"Node {self.id}: Forwarding packet to Node {link.get_id()}...")
+                link.forward_data_packet(packet)
 
 # Parse the topology file and return a list containing each line as an element
 def parse_input_file(file_name):
@@ -128,7 +139,7 @@ def main():
     
     # Run simulator for given amount of rounds
     for num in range(0, num_rounds):
-        #print(f"Round {num+1}:\n")
+        print(f"Round {num+1}:\n")
         for node in node_list:
             node.prepare_dv_packet()
 
@@ -136,11 +147,23 @@ def main():
             node.send_dv_packet()
             for inner_node in node_list:
                 if inner_node.update_routing_table():
-                    #print(f"Node {node_list.index(inner_node)} routing table updated...")
+                    print(f"Node {node_list.index(inner_node)} routing table updated...")
                     pass
-            
-    for node in node_list:
-        node.print_routing_table()
+
+    # Uncomment below to print the routing tables for each node        
+    #for node in node_list:
+    #    node.print_routing_table()
+
+    # Route a data packet based on the topology used
+    if file_name == "topology1.txt":
+        data_packet = [3, "Data for node 3"]
+        node_list[0].forward_data_packet(data_packet)
+    elif file_name == "topology2.txt":
+        data_packet = [7, "Data for node 7"]
+        node_list[0].forward_data_packet(data_packet)
+    elif file_name == "topology3.txt":
+        data_packet = [23, "Data for node 23"]
+        node_list[0].forward_data_packet(data_packet)
 
 if __name__ == '__main__':
     main()
