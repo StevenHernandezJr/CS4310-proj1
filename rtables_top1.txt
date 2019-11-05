@@ -1,0 +1,36 @@
+Node 0 Routing Table:
+Destination	Cost	Next Hop
+1		907	1
+2		291	2
+4		960	2
+3		931	1
+
+Node 1 Routing Table:
+Destination	Cost	Next Hop
+4		220	3
+0		907	0
+3		24	3
+2		746	3
+
+Node 2 Routing Table:
+Destination	Cost	Next Hop
+4		669	4
+3		722	3
+0		291	0
+1		746	3
+
+Node 3 Routing Table:
+Destination	Cost	Next Hop
+2		722	2
+4		196	4
+1		24	1
+0		931	1
+
+Node 4 Routing Table:
+Destination	Cost	Next Hop
+1		220	3
+2		669	2
+3		196	3
+0		960	2
+
+Number of rounds to convergence: 1
