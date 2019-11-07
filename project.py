@@ -34,8 +34,10 @@ class Node:
 
     # Generate DV packet and send it to each neighboring node
     def send_dv_packet(self):
+        global total_dv_packets_sent
         for link in self.neighbor_links:
             link.set_dv_packet(self.outgoing_packet)
+            total_dv_packets_sent += 1
         self.outgoing_packet = None
 
     # Save DV packet from neighbor
@@ -144,7 +146,9 @@ def main():
             node.prepare_dv_packet()
 
         for node in node_list:
+            print(f"\nNode {node.get_id()} sending DV packets...")
             node.send_dv_packet()
+            print(f"Total DV packets sent so far: {total_dv_packets_sent}")
             for inner_node in node_list:
                 if inner_node.update_routing_table():
                     print(f"Node {node_list.index(inner_node)} routing table updated...")
@@ -157,13 +161,14 @@ def main():
     # Route a data packet based on the topology used
     if file_name == "topology1.txt":
         data_packet = [3, "Data for node 3"]
-        node_list[0].forward_data_packet(data_packet)
+        #node_list[0].forward_data_packet(data_packet)
     elif file_name == "topology2.txt":
         data_packet = [7, "Data for node 7"]
-        node_list[0].forward_data_packet(data_packet)
+        #node_list[0].forward_data_packet(data_packet)
     elif file_name == "topology3.txt":
         data_packet = [23, "Data for node 23"]
-        node_list[0].forward_data_packet(data_packet)
+        #node_list[0].forward_data_packet(data_packet)
 
 if __name__ == '__main__':
+    total_dv_packets_sent = 0
     main()
