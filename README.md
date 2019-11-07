@@ -15,7 +15,9 @@ For more information about the project as well as other requirements, please rea
 Finally, the source code for the simulator is found in sim.py
 
 To run the simulator, use this command from the command line (assuming Python 3 is default):
+<br>
     `python sim.py <topology file> <number of rounds>`
 
 You may need to use this command if Python 3 is not default:
+<br>
     `python3 sim.py <topology file> <number of rounds>`
