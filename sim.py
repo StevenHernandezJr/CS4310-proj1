@@ -1,3 +1,6 @@
+# Name: Steven Hernandez
+# CS 4310 - Project 1
+
 import sys
 
 class Node:
